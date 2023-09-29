@@ -12,9 +12,12 @@ def process_single_run(experiment_dir, enemy, run_num):
         # Read the CSV file for computer data
         comp_data = pd.read_csv(comp_filepath)
 
-        # Group data by generation and calculate mean values
+        # Group data by generation and calculate cumulative time
+        comp_data['cumulative_time'] = comp_data['time'].cumsum()
+
+        # Calculate mean values for CPU and memory
         comp_data_mean = comp_data.groupby('generation').agg({
-            'time': 'sum',
+            'cumulative_time': 'last',  # Get the cumulative time for the last row in each generation
             'cpu_usage_percent': 'mean',
             'memory_usage_MB': 'mean'
         })
@@ -39,7 +42,7 @@ def process_all_runs(experiment_dir, enemy, num_runs):
     return avg_comp_data
 
 def plot_average_data(avg_comp_data):
-    # Create subplots for CPU usage, memory usage, and time
+    # Create subplots for CPU usage, memory usage, and cumulative time
     fig, (ax1, ax2, ax3) = plt.subplots(3, sharex=True)
 
     # Plot CPU usage
@@ -50,18 +53,18 @@ def plot_average_data(avg_comp_data):
     ax2.plot(avg_comp_data.index, avg_comp_data['memory_usage_MB'], label='Average Memory Usage', color='orange')
     ax2.set_ylabel('Memory Usage (MB)')
 
-    # Plot time
-    ax3.plot(avg_comp_data.index, avg_comp_data['time'], label='Total Time (s)', color='red')
+    # Plot cumulative time
+    ax3.plot(avg_comp_data.index, avg_comp_data['cumulative_time'], label='Cumulative Time (s)', color='red')
     ax3.set_xlabel('Generation')
-    ax3.set_ylabel('Total Time (s)')
+    ax3.set_ylabel('Cumulative Time (s)')
 
     plt.legend()
     plt.show()
 
 if __name__ == '__main__':
-    experiment_dir = 'exp1'  # Replace with your experiment directory
-    enemy = 1  # Set to the enemy you want to analyze
-    num_runs = 1  # Replace with the number of runs you have
+    experiment_dir = 'opt_enemy7_hidden0'  # Replace with your experiment directory
+    enemy = 7  # Set to the enemy you want to analyze
+    num_runs = 10  # Replace with the number of runs you have
 
     avg_comp_data = process_all_runs(experiment_dir, enemy, num_runs)
     plot_average_data(avg_comp_data)
