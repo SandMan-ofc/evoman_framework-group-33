@@ -6,11 +6,11 @@ import pickle
 import csv
 
 
-experiment_name = '7_Fixed_Structure'
-visuals = True
-original_enemy = 7
-run_number = 9
-new_enemy = 7
+experiment_name = 'TESTICLES'
+visuals = False
+original_enemy = 1
+run_number = 0
+new_enemy = 1
 tipo = 'Fixed Structure'
 
 
@@ -35,7 +35,7 @@ class player_controller(Controller):
 
 def run_winner(config, enemy, run_number, new_enemy): 
     env.enemies = [new_enemy]
-    env.visuals = False
+    env.visuals = visuals
     env.speed = 'fastest'
     individual_gain = []
     for i in range(5):

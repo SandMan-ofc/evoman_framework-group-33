@@ -41,30 +41,45 @@ def process_all_runs(experiment_dir, enemy, num_runs):
 
     return avg_comp_data
 
-def plot_average_data(avg_comp_data):
+def plot_average_data(avg_comp_data1, avg_comp_data2, label1, label2):
     # Create subplots for CPU usage, memory usage, and cumulative time
     fig, (ax1, ax2, ax3) = plt.subplots(3, sharex=True)
 
+    # Set smaller subplot titles
+    fig.suptitle('Comparison of Experiments', fontsize=12)
+
     # Plot CPU usage
-    ax1.plot(avg_comp_data.index, avg_comp_data['cpu_usage_percent'], label='Average CPU Usage')
+    ax1.plot(avg_comp_data1.index, avg_comp_data1['cpu_usage_percent'], label=f'{label1}')
+    ax1.plot(avg_comp_data2.index, avg_comp_data2['cpu_usage_percent'], label=f'{label2}')
     ax1.set_ylabel('CPU Usage (%)')
+    ax1.grid(True)
+    ax1.legend(fontsize='small')  # Make the legend smaller
 
     # Plot memory usage
-    ax2.plot(avg_comp_data.index, avg_comp_data['memory_usage_MB'], label='Average Memory Usage', color='orange')
+    ax2.plot(avg_comp_data1.index, avg_comp_data1['memory_usage_MB'], label=f'{label1}', color='orange')
+    ax2.plot(avg_comp_data2.index, avg_comp_data2['memory_usage_MB'], label=f'{label2}', color='green')
     ax2.set_ylabel('Memory Usage (MB)')
+    ax2.grid(True)
+    ax2.legend(fontsize='small')  # Make the legend smaller
 
     # Plot cumulative time
-    ax3.plot(avg_comp_data.index, avg_comp_data['cumulative_time'], label='Cumulative Time (s)', color='red')
+    ax3.plot(avg_comp_data1.index, avg_comp_data1['cumulative_time'], label=f'{label1}', color='red')
+    ax3.plot(avg_comp_data2.index, avg_comp_data2['cumulative_time'], label=f'{label2}', color='blue')
     ax3.set_xlabel('Generation')
     ax3.set_ylabel('Cumulative Time (s)')
+    ax3.legend(fontsize='small')  # Make the legend smaller
 
-    plt.legend()
+    plt.grid(True)
     plt.show()
 
+def process_and_plot_multiple_experiments(experiment_dirs, num_runs, enemies):
+    avg_comp_data1 = process_all_runs(experiment_dirs[0], enemies[0], num_runs)
+    avg_comp_data2 = process_all_runs(experiment_dirs[1], enemies[1], num_runs)
+    plot_average_data(avg_comp_data1, avg_comp_data2, experiment_dirs[0], experiment_dirs[1])
+
 if __name__ == '__main__':
-    experiment_dir = 'opt_enemy7_hidden0'  # Replace with your experiment directory
-    enemy = 7  # Set to the enemy you want to analyze
+    experiment_dirs = ['Enemy 7 flexible structure', 'Enemy 7 fixed structure']  # Replace with your experiment directories
+    enemies = [7, 7]  # Set to the enemies you want to analyze for each experiment
     num_runs = 10  # Replace with the number of runs you have
 
-    avg_comp_data = process_all_runs(experiment_dir, enemy, num_runs)
-    plot_average_data(avg_comp_data)
+    process_and_plot_multiple_experiments(experiment_dirs, num_runs, enemies)
