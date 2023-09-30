@@ -4,13 +4,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os 
 
-experiment_names = ['7_Fixed_Structure','7_Fixed_Structure','7_Fixed_Structure','7_Fixed_Structure','7_Fixed_Structure','7_Fixed_Structure']
+experiment_names = ['rigid_game_1','opt_enemy1_hidden0_1','7_Fixed_Structure','opt_enemy7_hidden0','8_Fixed_Structure','enemy-8-flex']
 
-original_enemy =[7,7,7,7,7,7]
+original_enemy =[1,1,7,7,8,8]
 #run_number = 9
-new_enemy = [7,7,7,7,7,7]
+new_enemy = [1,1,7,7,8,8]
 
-
+     
 
 df_csv_append = pd.DataFrame()
 for experiment_name in experiment_names:
